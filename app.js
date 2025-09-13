@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, Button, Alert } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { supabase } from './lib/supabase'
 
-export default function App() {
+const Stack = createNativeStackNavigator()
+
+// ---- AUTH SCREEN ----
+function AuthScreen({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
@@ -15,7 +20,10 @@ export default function App() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) Alert.alert('Error', error.message)
-      else Alert.alert('Success', 'Signed in successfully!')
+      else {
+        Alert.alert('Success', 'Signed in successfully!')
+        navigation.replace('Home') // 👈 go to Home after login
+      }
     }
   }
 
@@ -45,5 +53,26 @@ export default function App() {
         {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
       </Text>
     </View>
+  )
+}
+
+// ---- HOME SCREEN ----
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 24 }}>Welcome Home!</Text>
+    </View>
+  )
+}
+
+// ---- APP ----
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Auth">
+        <Stack.Screen name="Auth" component={AuthScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
