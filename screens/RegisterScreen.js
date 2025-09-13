@@ -14,7 +14,7 @@ export default function SignUpScreen({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f0f0f0' }}>
       <Text style={{ fontSize: 24, marginBottom: 20, textAlign: 'center' }}>
         Sign Up
       </Text>
